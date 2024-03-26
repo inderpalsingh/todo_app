@@ -66,7 +66,6 @@ class _HomePageState extends State<HomePage> {
               ),
 
               trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].createdAt)) ),
                   IconButton(
@@ -137,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                         todoList.add(TodoModel(
                             title: todoTitleController.text,
                             desc: descTitleController.text,
-                            createdAt: DateTime.now().microsecondsSinceEpoch
+                            createdAt: DateTime.now().microsecondsSinceEpoch,
                             
                         ));
                       } else {
