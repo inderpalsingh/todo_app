@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/models/todo_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,62 +14,73 @@ class _HomePageState extends State<HomePage> {
   TextEditingController todoTitleController = TextEditingController();
   TextEditingController descTitleController = TextEditingController();
 
+  DateFormat dateFormat = DateFormat.Hm();
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
           itemCount: todoList.length,
           itemBuilder: (context, index) {
-            return CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              value: todoList[index].isCompleted,
-              onChanged: (value) {
-                setState(() {
-                  todoList[index].isCompleted = value!;
-                });
+            // return CheckboxListTile(
+            //   controlAffinity: ListTileControlAffinity.leading,
+            //   value: todoList[index].isCompleted,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       todoList[index].isCompleted = value!;
+            //     });
+            //   },
+            //   title: Text(todoList[index].title),
+            //   subtitle: Text(todoList[index].desc),
+            //   secondary: IconButton(
+            //     onPressed: () {
+            //       todoList.removeAt(index);
+            //       setState(() {});
+            //     },
+            //     icon: const Icon(Icons.delete, color: Colors.red),
+            //   ),
+            // );
+
+            return ListTile(
+              onTap: () {
+                todoTitleController.text = todoList[index].title;
+                descTitleController.text = todoList[index].desc;
+                showModalBottomSheet(
+                    context: context,
+                    builder: (_) {
+                      return customBottomSheet(
+                          isUpdate: true, updateIndex: index, createdAt: todoList[index].createdAt, updatedAt: todoList[index].updatedAt);
+                    });
               },
               title: Text(todoList[index].title),
               subtitle: Text(todoList[index].desc),
-              secondary: IconButton(
-                onPressed: () {
-                  todoList.removeAt(index);
-                  setState(() {});
+              
+              leading: Checkbox(
+                value: todoList[index].isCompleted,
+                onChanged: (value) {
+                  setState(() {
+                    todoList[index].isCompleted = value!;
+                  });
                 },
-                icon: const Icon(Icons.delete, color: Colors.red),
+              ),
+
+              trailing: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].createdAt)) ),
+                  IconButton(
+                    onPressed: () {
+                      todoList.removeAt(index);
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
+                     
+                  Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].updatedAt))),
+                ],
               ),
             );
-
-            /*child: ListTile(
-                onTap: () {
-                  todoTitleController.text = todoList[index].title;
-                  descTitleController.text = todoList[index].desc;
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (_) {
-                        return customBottomSheet(
-                            isUpdate: true, updateIndex: index);
-                      });
-                },
-                title: Text(todoList[index].title),
-                subtitle: Text(todoList[index].desc),
-              
-                // leading: CheckboxListTile(
-                //  
-                //     value: todoList[index].isCompleted,
-                //     onChanged: (value){
-                //       setState(() {
-                //         todoList[index].isCompleted = value!;
-                //       });
-                //     }),
-              
-                trailing: IconButton(
-                  onPressed: () {
-                    todoList.removeAt(index);
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                ),
-              ),*/
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -89,7 +101,7 @@ class _HomePageState extends State<HomePage> {
 
   /// Custom Function
   Widget customBottomSheet(
-      {bool isUpdate = false, int updateIndex = -1, bool isComplete = false}) {
+      {bool isUpdate = false, int updateIndex = -1,int createdAt =0 ,int updatedAt =0 }) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         height: 600,
@@ -124,7 +136,10 @@ class _HomePageState extends State<HomePage> {
 
                         todoList.add(TodoModel(
                             title: todoTitleController.text,
-                            desc: descTitleController.text));
+                            desc: descTitleController.text,
+                            createdAt: DateTime.now().microsecondsSinceEpoch
+                            
+                        ));
                       } else {
                         /*todoList[updateInder] = {
                           'todoTitle': todoTitleController.text,
@@ -133,7 +148,10 @@ class _HomePageState extends State<HomePage> {
 
                         todoList[updateIndex] = TodoModel(
                             title: todoTitleController.text,
-                            desc: descTitleController.text);
+                            desc: descTitleController.text,
+                            createdAt: createdAt,
+                            updatedAt: DateTime.now().microsecondsSinceEpoch
+                        );
                       }
                       setState(() {});
 
