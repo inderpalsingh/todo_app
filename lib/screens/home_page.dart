@@ -65,17 +65,17 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
 
-              trailing: Column(
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].createdAt)) ),
-                  IconButton(
-                    onPressed: () {
+                  Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].createdAt))),
+                  InkWell(
+                    onTap: () {
                       todoList.removeAt(index);
                       setState(() {});
                     },
-                    icon: const Icon(Icons.delete, color: Colors.red),
+                    child: Icon(Icons.delete, color: Colors.red),
                   ),
-                     
                   Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].updatedAt))),
                 ],
               ),
