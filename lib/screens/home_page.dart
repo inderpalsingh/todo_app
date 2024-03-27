@@ -8,7 +8,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   // List<Map<String, dynamic>> todoList = [];
+  
   List<TodoModel> todoList = [];
 
   TextEditingController todoTitleController = TextEditingController();
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Icon(Icons.delete, color: Colors.red),
                   ),
-                  Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].updatedAt))),
+                  todoList[index].updatedAt == 0  ? Container()  : Text(dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(todoList[index].updatedAt))),
                 ],
               ),
             );
