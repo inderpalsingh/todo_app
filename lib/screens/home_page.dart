@@ -50,11 +50,16 @@ class _HomePageState extends State<HomePage> {
                     context: context,
                     builder: (_) {
                       return customBottomSheet(
-                          isUpdate: true, updateIndex: index, createdAt: todoList[index].createdAt, updatedAt: todoList[index].updatedAt);
+                          isUpdate: true,
+                          updateIndex: index,
+                          createdAt: todoList[index].createdAt,
+                          updatedAt: todoList[index].updatedAt,
+                        );
                     });
               },
               title: Text(todoList[index].title),
               subtitle: Text(todoList[index].desc),
+              tileColor: todoList[index].isCompleted ? Colors.green : null,
               
               leading: Checkbox(
                 value: todoList[index].isCompleted,
